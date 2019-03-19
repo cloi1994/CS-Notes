@@ -30,20 +30,20 @@
 
 ## :pencil2: 算法
 
-- [剑指 Offer 题解](https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/剑指%20Offer%20题解%20-%20目录.md)
-- [Leetcode 题解](https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/Leetcode%20题解%20-%20目录.md)
-- [算法](https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/算法%20-%20目录.md)
+- [剑指 Offer 题解](https://github.com/ckloi/CS-Notes/blob/master/docs/notes/剑指%20Offer%20题解%20-%20目录.md)
+- [Leetcode 题解](https://github.com/ckloi/CS-Notes/blob/master/docs/notes/Leetcode%20题解%20-%20目录.md)
+- [算法](https://github.com/CyC2018/CS-ckloi/blob/master/docs/notes/算法%20-%20目录.md)
 
 ## :computer: 操作系统
 
-- [计算机操作系统](https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/计算机操作系统%20-%20目录.md)
-- [Linux](https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/Linux.md)
+- [计算机操作系统](https://github.com/ckloi/CS-Notes/blob/master/docs/notes/计算机操作系统%20-%20目录.md)
+- [Linux](https://github.com/ckloi/CS-Notes/blob/master/docs/notes/Linux.md)
 
 ## :cloud: 网络 
 
-- [计算机网络](https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/计算机网络%20-%20目录.md)
-- [HTTP](https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/HTTP.md)
-- [Socket](https://github.com/CyC2018/CS-Notes/blob/master/docs/notes/Socket.md)
+- [计算机网络](https://github.com/ckloi/CS-Notes/blob/master/docs/notes/计算机网络%20-%20目录.md)
+- [HTTP](https://github.com/ckloi/CS-Notes/blob/master/docs/notes/HTTP.md)
+- [Socket](https://github.com/ckloi/CS-Notes/blob/master/docs/notes/Socket.md)
 
 ## :art: 面向对象
 
