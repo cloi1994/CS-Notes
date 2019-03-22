@@ -916,7 +916,18 @@ ConcurrentHashMap 在执行 size 操作时先尝试不加锁，如果连续两�
 
 如果尝试的次数超过 3 次，就需要对每个 Segment 加锁。
 
-### 6. 不需要锁
+### 6. Resize
+
+
+**是否需要扩容?**
+在插入元素前会先判断Segment里的HashEntry数组是否超过容量（threshold），如果超过阀值，数组进行扩容。值得一提的是，Segment的扩容判断比HashMap更恰当，因为HashMap是在插入元素后判断元素是否已经到达容量的，如果到达了就进行扩容，但是很有可能扩容之后没有新元素插入，这时HashMap就进行了一次无效的扩容。
+
+Segment size 是固定的。太多浪费Time and Space, 太小就有thread competition。
+
+**如何扩容?**
+扩容的时候首先会创建一个两倍于原容量的数组，然后将原数组里的元素进行再hash后插入到新的数组里。为了高效ConcurrentHashMap不会对整个容器进行扩容，而只对某个segment进行扩容。
+
+### 7. 不需要锁
 
 1. 所有的修改操作在进行结构修改时都会在最后一步写count, 通过这种机制保证get操作能够得到几乎最新的结构更新。对于非结构更新，也就是结点值的改变，由于HashEntry的value变量是 volatile的，也能保证读取到最新的值。
 
@@ -934,7 +945,7 @@ ConcurrentHashMap 在执行 size 操作时先尝试不加锁，如果连续两�
    在这条语句中，HashEntry构造函数中对value的赋值以及对tab[index]的赋值可能被重新排序，这就可能导致结点的值为空。这里当v为空时，
    可能是一个线程正在改变节点，而之前的get操作都未进行锁定，根据bernstein条件，读后写或写后读都会引起数据的不一致，所以这里要对这个e重新上锁再读一遍，以保证得到的是正确值。
 
-### 7. Happen Before
+### 8. Happen Before
 
 在get操作里只需要读不需要写共享变量count和value，所以可以不用加锁。之所以不会读到过期的值，
 
@@ -942,7 +953,7 @@ ConcurrentHashMap 在执行 size 操作时先尝试不加锁，如果连续两�
 
 即使两个线程同时修改和获取volatile变量，get操作也能拿到最新的值，这是用volatile替换锁的经典应用场景。
 
-### 8. 重排序
+### 9. 重排序
 
 使用锁去读取value是不需要的，因为一个竞争的remove操作不会使value为空。
 
@@ -951,7 +962,7 @@ ConcurrentHashMap 在执行 size 操作时先尝试不加锁，如果连续两�
 Doug Lea也不确定null值的情况一定会发生，所以上面说到Bill Pugh曾经建议把readValueUnderLock放在这里
 
 
-### 3. JDK 1.8 的改动
+### 10. JDK 1.8 的改动
 
 JDK 1.7 使用分段锁机制来实现并发更新操作，核心类为 Segment，它继承自重入锁 ReentrantLock，并发度与 Segment 数量相等。
 
