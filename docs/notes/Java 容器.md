@@ -810,7 +810,7 @@ Thread 1 的 table(3) -> 7, e = 11
 下一循环， table(3) -> 11 -> 7 -> 11 , e = null (死循环)
 
 
-https://coolshell.cn/articles/9606.html#comments
+https://coolshell.cn/articles/9606.html
 
 ## ConcurrentHashMap
 
