@@ -639,6 +639,12 @@ y%x : 00000010
 
 确定桶下标的最后一步是将 key 的 hash 值对桶个数取模：hash%capacity，如果能保证 capacity 为 2 的 n 次方，那么就可以将这个操作转换为位运算。
 
+hash%length==hash&(length-1)的前提是length是2的n次方；
+为什么这样能均匀分布减少碰撞呢？2的n次方实际就是1后面n个0，2的n次方-1  实际就是n个1；
+例如长度为9时候，3&(9-1)=0  2&(9-1)=0 ，都在0上，碰撞了；
+例如长度为8时候，3&(8-1)=3  2&(8-1)=2 ，不同位置上，不碰撞；
+
+
 ```java
 static int indexFor(int h, int length) {
     return h & (length-1);
@@ -773,6 +779,7 @@ static final int tableSizeFor(int cap) {
 }
 ```
 
+
 ### 8. 链表转红黑树
 
 从 JDK 1.8 开始，一个桶存储的链表长度大于 8 时会将链表转换为红黑树。
@@ -783,6 +790,27 @@ static final int tableSizeFor(int cap) {
 - HashMap 可以插入键为 null 的 Entry。
 - HashMap 的迭代器是 fail-fast 迭代器。
 - HashMap 不能保证随着时间的推移 Map 中的元素次序是不变的。
+
+
+### 10. Concurrent问题 （死循环）
+
+Thread 1 : 挂起 e = 7 next = 11
+
+Thread 2 : 完成 resize (table size = 4) 
+
+指向thread 2 完成的 reference，插入顺序反了
+table(3) 11 -> 7
+
+Thread 1:
+
+继续 resize。
+
+Thread 1 的 table(3) -> 7, e = 11
+下一循环， table(3) -> 11 -> 7 , e = 7
+下一循环， table(3) -> 11 -> 7 -> 11 , e = null (死循环)
+
+
+https://coolshell.cn/articles/9606.html#comments
 
 ## ConcurrentHashMap
 
@@ -798,6 +826,9 @@ static final class HashEntry<K,V> {
 ```
 
 ConcurrentHashMap 和 HashMap 实现上类似，最主要的差别是 ConcurrentHashMap 采用了分段锁（Segment），每个分段锁维护着几个桶（HashEntry），多个线程可以同时访问不同分段锁上的桶，从而使其并发度更高（并发度就是 Segment 的个数）。
+
+**key != null**
+当ConcurrentMaps使用map.get(key)时返回为null,无法判断key是不存在还是值为空，non-concurrent还可以再调用map.contains(key)检查，但ConcurrentMaps可能再两次调用间已经发生改变。
 
 Segment 继承自 ReentrantLock。
 
