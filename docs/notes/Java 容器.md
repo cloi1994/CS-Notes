@@ -828,6 +828,7 @@ static final class HashEntry<K,V> {
 ConcurrentHashMap 和 HashMap 实现上类似，最主要的差别是 ConcurrentHashMap 采用了分段锁（Segment），每个分段锁维护着几个桶（HashEntry），多个线程可以同时访问不同分段锁上的桶，从而使其并发度更高（并发度就是 Segment 的个数）。
 
 **key != null**
+
 当ConcurrentMaps使用map.get(key)时返回为null,无法判断key是不存在还是值为空，non-concurrent还可以再调用map.contains(key)检查，但ConcurrentMaps可能再两次调用间已经发生改变。
 
 Segment 继承自 ReentrantLock。
@@ -864,7 +865,38 @@ static final int DEFAULT_CONCURRENCY_LEVEL = 16;
 
 <div align="center"> <img src="pics/deb18bdb-b3b3-4660-b778-b0823a48db12.jpg"/> </div><br>
 
-### 2. size 操作
+### 2. Put
+Put方法首先定位到Segment，然后在Segment里进行插入操作。
+
+1. 插入操作需要经历两个步骤，
+
+2. if: 判断是否需要对Segment里的HashEntry数组进行扩容
+
+3. 定位添加元素的位置然后放在HashEntry数组里
+
+4. 如果key存在就直接替换这个结点的value。 否则创建一个新的结点并添加到hash链的头部，先修改modCount，最后成功才修改count的值
+
+### 3. Get
+
+ConcurrentHashMap的get操作是直接委托给Segment的get方法(不需要锁)
+
+
+1. 访问count volatile变量是否为0
+2. 根据hash和key对hash链进行遍历找到要获取的结点，如果没有找到，直接返回null。
+3. 如果找到了所求的结点，判断它的值如果非空就直接返回，否则在有锁的状态下再读一次。
+
+
+### 4. Remove
+
+1. 和 get 操作一样，首先根据hash找到具体的链表(如果不存在这个节点就直接返回null)
+2. 遍历这个链表找到要删除的节点
+3. 把待删除节点之后的所有节点保留在新链表中，把待删除节点之前的每个节点克隆到新链表中。
+
+<div align="center"> <img src="https://camo.githubusercontent.com/b49362d6ff15237d5a2633b9eb4d6482c9ea475d/68747470733a2f2f7777772e69626d2e636f6d2f646576656c6f706572776f726b732f636e2f6a6176612f6a6176612d6c6f2d636f6e63757272656e74686173686d61702f696d6167653030382e6a7067"/> </div><br>
+
+假设写线程执行 remove 操作，要删除链表的 C 节点，另一个读线程同时正在遍历这个链表。
+
+### 5. size 操作
 
 每个 Segment 维护了一个 count 变量来统计该 Segment 中的键值对个数。
 
@@ -884,58 +916,40 @@ ConcurrentHashMap 在执行 size 操作时先尝试不加锁，如果连续两�
 
 如果尝试的次数超过 3 次，就需要对每个 Segment 加锁。
 
-```java
+### 6. 不需要锁
 
-/**
- * Number of unsynchronized retries in size and containsValue
- * methods before resorting to locking. This is used to avoid
- * unbounded retries if tables undergo continuous modification
- * which would make it impossible to obtain an accurate result.
- */
-static final int RETRIES_BEFORE_LOCK = 2;
+1. 所有的修改操作在进行结构修改时都会在最后一步写count, 通过这种机制保证get操作能够得到几乎最新的结构更新。对于非结构更新，也就是结点值的改变，由于HashEntry的value变量是 volatile的，也能保证读取到最新的值。
 
-public int size() {
-    // Try a few times to get accurate count. On failure due to
-    // continuous async changes in table, resort to locking.
-    final Segment<K,V>[] segments = this.segments;
-    int size;
-    boolean overflow; // true if size overflows 32 bits
-    long sum;         // sum of modCounts
-    long last = 0L;   // previous sum
-    int retries = -1; // first iteration isn't retry
-    try {
-        for (;;) {
-            // 超过尝试次数，则对每个 Segment 加锁
-            if (retries++ == RETRIES_BEFORE_LOCK) {
-                for (int j = 0; j < segments.length; ++j)
-                    ensureSegment(j).lock(); // force creation
-            }
-            sum = 0L;
-            size = 0;
-            overflow = false;
-            for (int j = 0; j < segments.length; ++j) {
-                Segment<K,V> seg = segmentAt(segments, j);
-                if (seg != null) {
-                    sum += seg.modCount;
-                    int c = seg.count;
-                    if (c < 0 || (size += c) < 0)
-                        overflow = true;
-                }
-            }
-            // 连续两次得到的结果一致，则认为这个结果是正确的
-            if (sum == last)
-                break;
-            last = sum;
-        }
-    } finally {
-        if (retries > RETRIES_BEFORE_LOCK) {
-            for (int j = 0; j < segments.length; ++j)
-                segmentAt(segments, j).unlock();
-        }
-    }
-    return overflow ? Integer.MAX_VALUE : size;
-}
-```
+2. 对hash链进行遍历不需要加锁的原因在于链指针next是final的。
+
+3. 头指针却不是final的，这使得getFirst(hash)可能返回过时的头结点，
+
+   例如，当执行get方法时，刚执行完getFirst(hash)之后，另一个线程执行了删除操作并更新头结点，这就导致get方法中返回的头结点不是最新的。
+这是可以允许，通过对count变量的协调机制，get能读取到几乎最新的数据，虽然可能不是最新的。要得到最新的数据，只有采用完全的同步。
+
+4. 理论上结点的值不可能为空，这是因为 put的时候就进行了判断，如果为空就要抛NullPointerException。
+
+   空值的唯一源头就是HashEntry中的默认值，因为 HashEntry中的value不是final的，非同步读取有可能读取到空值。
+   仔细看下put操作的语句：tab[index] = new HashEntry<K,V>(key, hash, first, value)，
+   在这条语句中，HashEntry构造函数中对value的赋值以及对tab[index]的赋值可能被重新排序，这就可能导致结点的值为空。这里当v为空时，
+   可能是一个线程正在改变节点，而之前的get操作都未进行锁定，根据bernstein条件，读后写或写后读都会引起数据的不一致，所以这里要对这个e重新上锁再读一遍，以保证得到的是正确值。
+
+### 7. Happen Before
+
+在get操作里只需要读不需要写共享变量count和value，所以可以不用加锁。之所以不会读到过期的值，
+
+是根据java内存模型的happen before原则，对volatile字段的写入操作先于读操作，
+
+即使两个线程同时修改和获取volatile变量，get操作也能拿到最新的值，这是用volatile替换锁的经典应用场景。
+
+### 8. 重排序
+
+使用锁去读取value是不需要的，因为一个竞争的remove操作不会使value为空。
+
+对新的内存模型来说，readValueUnderLock是不需要的，但是对于旧的内存模型，因为重排，put也许会看到null值
+
+Doug Lea也不确定null值的情况一定会发生，所以上面说到Bill Pugh曾经建议把readValueUnderLock放在这里
+
 
 ### 3. JDK 1.8 的改动
 
