@@ -49,6 +49,7 @@ new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, timeUnit, r
 - keepAliveTime：空闲线程的存活时间 
 
 &nbsp;&nbsp;&nbsp;&nbsp;当实际线程数量超过corePoolSize时，若线程空闲的时间超过该值，就会被停止。 
+
 &nbsp;&nbsp;&nbsp;&nbsp;PS：当任务很多，且任务执行时间很短的情况下，可以将该值调大，提高线程利用率。
 
 - timeUnit：keepAliveTime的单位
@@ -63,6 +64,7 @@ new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, timeUnit, r
 4. PriorityBlockingQueue: 优先权阻塞队列。
 
 - handler：饱和策略 
+
 &nbsp;&nbsp;&nbsp;&nbsp;当实际线程数达到maximumPoolSize，并且阻塞队列已满时，就会调用饱和策略。 
 
 1. AbortPolicy: 默认。直接抛异常。
