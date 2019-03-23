@@ -35,9 +35,11 @@ new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, timeUnit, r
 ```
 
 - corePoolSize：基本线程数量 
+
 &nbsp;&nbsp;&nbsp;&nbsp;它表示你希望线程池达到的一个值。线程池会尽量把实际线程数量保持在这个值上下。
 
 - maximumPoolSize：最大线程数量 
+
 &nbsp;&nbsp;&nbsp;&nbsp;这是线程数量的上界。 
 &nbsp;&nbsp;&nbsp;&nbsp;如果实际线程数量达到这个值：
 
@@ -73,9 +75,11 @@ new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, timeUnit, r
 可以向ThreadPoolExecutor提交两种任务：Callable和Runnable。
 
 1. Callable 
+
 &nbsp;&nbsp;&nbsp;&nbsp;该类任务有返回结果，可以抛出异常。通过submit函数提交，返回Future对象。 可通过get获取执行结果。
 
 2. Runnable 
+
 &nbsp;&nbsp;&nbsp;&nbsp;该类任务只执行，无法获取返回结果，并在执行过程中无法抛异常。 通过execute提交。
 
 ## 关闭线程池
