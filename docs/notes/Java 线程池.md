@@ -54,19 +54,19 @@ new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, timeUnit, r
 - runnableTaskQueue：任务队列 
 
 &nbsp;&nbsp;&nbsp;&nbsp;这是一个存放任务的阻塞队列，可以有如下几种选择： 
-&nbsp;&nbsp;&nbsp;&nbsp;1. ArrayBlockingQueue: 由数组实现的阻塞队列，FIFO。
-&nbsp;&nbsp;&nbsp;&nbsp;2. LinkedBlockingQueue: 链表实现的阻塞队列，FIFO。 吞吐量通常要高于ArrayBlockingQueue。是个无界队列。
-&nbsp;&nbsp;&nbsp;&nbsp;3. SynchronousQueue： 它是一个没有存储空间的阻塞队列，任务提交给它之后必须要交给一条工作线程处理；如果当前没有空闲的工作线程，则立即创建一条新的工作线程。 cachedThreadPool用的阻塞队列就是它。 
+1. ArrayBlockingQueue: 由数组实现的阻塞队列，FIFO。
+2. LinkedBlockingQueue: 链表实现的阻塞队列，FIFO。 吞吐量通常要高于ArrayBlockingQueue。是个无界队列。
+3. SynchronousQueue： 它是一个没有存储空间的阻塞队列，任务提交给它之后必须要交给一条工作线程处理；如果当前没有空闲的工作线程，则立即创建一条新的工作线程。 cachedThreadPool用的阻塞队列就是它。 
 它是一个无界队列。
-&nbsp;&nbsp;&nbsp;&nbsp;4. PriorityBlockingQueue: 优先权阻塞队列。
+4. PriorityBlockingQueue: 优先权阻塞队列。
 
 - handler：饱和策略 
-当实际线程数达到maximumPoolSize，并且阻塞队列已满时，就会调用饱和策略。 
+&nbsp;&nbsp;&nbsp;&nbsp;当实际线程数达到maximumPoolSize，并且阻塞队列已满时，就会调用饱和策略。 
 
-&nbsp;&nbsp;&nbsp;&nbsp;1. AbortPolicy: 默认。直接抛异常。
-&nbsp;&nbsp;&nbsp;&nbsp;2. CallerRunsPolicy:只用调用者所在的线程执行任务。
-&nbsp;&nbsp;&nbsp;&nbsp;3. DiscardOldestPolicy: 丢弃任务队列中最久的任务。
-&nbsp;&nbsp;&nbsp;&nbsp;4. DiscardPolicy: 丢弃当前任务。
+1. AbortPolicy: 默认。直接抛异常。
+2. CallerRunsPolicy:只用调用者所在的线程执行任务。
+3. DiscardOldestPolicy: 丢弃任务队列中最久的任务。
+4. DiscardPolicy: 丢弃当前任务。
 
 ## 提交任务
 
