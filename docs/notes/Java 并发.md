@@ -730,6 +730,35 @@ after
 
 java.util.concurrent（J.U.C）大大提高了并发性能，AQS 被认为是 J.U.C 的核心。
 
+## 独占锁
+
+**获取**
+1. 调用入口方法acquire(arg)
+2. 调用模版方法tryAcquire(arg)尝试获取锁，若成功则返回，若失败则走下一步
+3. 将当前线程构造成一个Node节点，并利用CAS将其加入到同步队列到尾部，然后该节点对应到线程进入自旋状态
+4. 自旋时，首先判断其前驱节点释放为头节点&是否成功获取同步状态，两个条件都成立，则将当前线程的节点设置为头节点，如果不是，则利用LockSupport.park(this)将当前线程挂起 ,等待被前驱节点唤醒
+
+**释放**
+1. 调用入口方法release(arg)
+2. 调用模版方法tryRelease(arg)释放同步状态
+3. 获取当前节点的下一个节点
+4. 利用LockSupport.unpark(currentNode.next.thread)唤醒后继节点（接获取的第四步） 
+
+## 共享锁
+
+**获取锁**
+1. 调用acquireShared(arg)入口方法
+2. 进入tryAcquireShared(arg)模版方法获取同步状态，如果返回值>=0，则说明同步状态(state)有剩余，获取锁成功直接返回
+3. 如果tryAcquireShared(arg)返回值<0，说明获取同步状态失败，向队列尾部添加一个共享类型的Node节点，随即该节点进入自旋状态
+4. 自旋时，首先检查前驱节点释放为头节点&tryAcquireShared()是否>=0(即成功获取同步状态)
+5. 如果是，则说明当前节点可执行，同时把当前节点设置为头节点，并且唤醒所有后继节点
+6. 如果否，则利用LockSupport.unpark(this)挂起当前线程，等待被前驱节点唤醒
+
+**释放锁**
+1. 调用releaseShared(arg)模版方法释放同步状态
+2. 如果释放成，则遍历整个队列，利用LockSupport.unpark(nextNode.thread)唤醒所有后继节点
+
+
 ## CountDownLatch
 
 用来控制一个线程等待多个线程。
