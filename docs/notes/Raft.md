@@ -8,7 +8,7 @@
   * [4.日志复制](#4日志复制)
 - [三、Raft和Paxos的工程应用](#三Raft和Paxos的工程应用)
   * [1.Raft的应用](#1Raft的应用)
-  * [2.如何解决split brain问题](#2如何解决split brain问题)
+  * [2.如何解决split brain问题](#2如何解决splitbrain问题)
 - [四、从CAP的角度理解几种不同的算法](#四从CAP的角度理解几种不同的算法)
   * [1.两阶段提交协议](#1两阶段提交协议)
   * [2.Paxos和Raft算法](#2Paxos和Raft算法)
