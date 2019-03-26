@@ -1,12 +1,17 @@
-# Table of contents
-1. [一、更加直观的Raft算法](一、更加直观的Raft算法)
-    1. [1.解决什么问题](#1.解决什么问题)
-    2. [Sub paragraph](#subparagraph1)
-2. [Some paragraph](#paragraph1)
-    1. [Sub paragraph](#subparagraph1)
-3. [Another paragraph](#paragraph2)
-
-
+- [一、更加直观的Raft算法](#-------raft--)
+  * [1.解决什么问题](#1------)
+  * [2.Raft概览](#2raft--)
+- [二、Raft算法流程](#--raft----)
+  * [1.Term](#1term)
+  * [2.RPC](#2rpc)
+  * [3.选举流程](#3----)
+  * [4.日志复制](#4----)
+- [三、Raft和Paxos的工程应用](#--raft-paxos-----)
+  * [1.Raft的应用](#1raft---)
+  * [2.如何解决split brain问题](#2----split-brain--)
+- [四、从CAP的角度理解几种不同的算法](#---cap------------)
+  * [1.两阶段提交协议](#1-------)
+  * [2.Paxos和Raft算法](#2paxos-raft--)
 
 ## 一、更加直观的Raft算法
 Raft 适用于一个管理日志一致性的协议，相比于 Paxos 协议 Raft 更易于理解和去实现它。
