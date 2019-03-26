@@ -39,7 +39,8 @@ Candidate
 
 状态或者说角色的流转如下：
 
-state
+[state](https://img.alicdn.com/tfs/TB1UEuni.R1BeNjy0FmXXb0wVXa-1152-480.png)
+
 
 在Raft中，问题分解为：领导选取、日志复制、安全和成员变化。
 
