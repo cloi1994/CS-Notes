@@ -39,7 +39,7 @@ Candidate
 
 状态或者说角色的流转如下：
 
-[state](https://img.alicdn.com/tfs/TB1UEuni.R1BeNjy0FmXXb0wVXa-1152-480.png)
+<div align="center"> <img src="https://img.alicdn.com/tfs/TB1UEuni.R1BeNjy0FmXXb0wVXa-1152-480.png"/> </div><br>
 
 
 在Raft中，问题分解为：领导选取、日志复制、安全和成员变化。
@@ -58,7 +58,6 @@ Term的概念类比中国历史上的朝代更替，Raft 算法将时间划分�
 
 任期用连续的数字进行表示。每一个任期的开始都是一次选举（election），一个或多个候选人会试图成为领导人。如果一个候选人赢得了选举，它就会在该任期的剩余时间担任领导人。在某些情况下，选票会被瓜分，有可能没有选出领导人，那么，将会开始另一个任期，并且立刻开始下一次选举。Raft 算法保证在给定的一个任期最多只有一个领导人。
 
-中国历史
 
 ### 2.RPC
 Raft 算法中服务器节点之间通信使用远程过程调用（RPCs），并且基本的一致性算法只需要两种类型的 RPCs，为了在服务器之间传输快照增加了第三种 RPC。
