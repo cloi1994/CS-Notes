@@ -1,3 +1,13 @@
+# Table of contents
+1. [一、更加直观的Raft算法](一、更加直观的Raft算法)
+    1. [1.解决什么问题](#1.解决什么问题)
+    2. [Sub paragraph](#subparagraph1)
+2. [Some paragraph](#paragraph1)
+    1. [Sub paragraph](#subparagraph1)
+3. [Another paragraph](#paragraph2)
+
+
+
 ## 一、更加直观的Raft算法
 Raft 适用于一个管理日志一致性的协议，相比于 Paxos 协议 Raft 更易于理解和去实现它。
 
