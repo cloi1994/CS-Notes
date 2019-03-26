@@ -1,4 +1,4 @@
-- [一、更加直观的Raft算法](#-------raft--)
+- [一、更加直观的Raft算法](#一更加直观的Raft算法)
   * [1.解决什么问题](#1------)
   * [2.Raft概览](#2raft--)
 - [二、Raft算法流程](#--raft----)
@@ -12,8 +12,6 @@
 - [四、从CAP的角度理解几种不同的算法](#---cap------------)
   * [1.两阶段提交协议](#1-------)
   * [2.Paxos和Raft算法](#2paxos-raft--)
-
-<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
 
 ## 一、更加直观的Raft算法
