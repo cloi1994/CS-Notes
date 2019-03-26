@@ -13,6 +13,9 @@
   * [1.两阶段提交协议](#1-------)
   * [2.Paxos和Raft算法](#2paxos-raft--)
 
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
+
 ## 一、更加直观的Raft算法
 Raft 适用于一个管理日志一致性的协议，相比于 Paxos 协议 Raft 更易于理解和去实现它。
 
