@@ -24,6 +24,7 @@
 - [Raft](https://github.com/ckloi/CS-Notes/blob/master/docs/notes/Raft.md)
 - [Index](https://github.com/ckloi/CS-Notes/blob/master/docs/notes/index.md)
 - [秒杀](https://github.com/ckloi/CS-Notes/blob/master/docs/notes/秒杀.md)
+- [RabbitMQ](https://github.com/ckloi/CS-Notes/blob/master/docs/notes/RabbitMQ.md)
 
 ## :coffee: Java
 
