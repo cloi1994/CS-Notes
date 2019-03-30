@@ -1,3 +1,11 @@
+- [2.2 阶段1](#22-%E9%98%B6%E6%AE%B51)
+- [2.3 阶段2](#23-%E9%98%B6%E6%AE%B52)
+- [2.4 Failure](#24-failure)
+  - [If Site failed：](#if-site-failed)
+  - [If Ci failed:](#if-ci-failed)
+- [2.5 优缺点](#25-%E4%BC%98%E7%BC%BA%E7%82%B9)
+- [3PC](#3pc)
+- [小结](#%E5%B0%8F%E7%BB%93)
 ### 2.2 阶段1
 
 在阶段1中，协调者发起一个提议，分别问询各参与者是否接受
