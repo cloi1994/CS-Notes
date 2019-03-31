@@ -1,59 +1,66 @@
-<!-- GFM-TOC -->
-* [一 、基础概念](#一-基础概念)
-    * [URI](#uri)
-    * [请求和响应报文](#请求和响应报文)
-* [二、HTTP 方法](#二http-方法)
-    * [GET](#get)
-    * [HEAD](#head)
-    * [POST](#post)
-    * [PUT](#put)
-    * [PATCH](#patch)
-    * [DELETE](#delete)
-    * [OPTIONS](#options)
-    * [CONNECT](#connect)
-    * [TRACE](#trace)
-* [三、HTTP 状态码](#三http-状态码)
-    * [1XX 信息](#1xx-信息)
-    * [2XX 成功](#2xx-成功)
-    * [3XX 重定向](#3xx-重定向)
-    * [4XX 客户端错误](#4xx-客户端错误)
-    * [5XX 服务器错误](#5xx-服务器错误)
-* [四、HTTP 首部](#四http-首部)
-    * [通用首部字段](#通用首部字段)
-    * [请求首部字段](#请求首部字段)
-    * [响应首部字段](#响应首部字段)
-    * [实体首部字段](#实体首部字段)
-* [五、具体应用](#五具体应用)
-    * [连接管理](#连接管理)
-    * [Cookie](#cookie)
-    * [缓存](#缓存)
-    * [内容协商](#内容协商)
-    * [内容编码](#内容编码)
-    * [范围请求](#范围请求)
-    * [分块传输编码](#分块传输编码)
-    * [多部分对象集合](#多部分对象集合)
-    * [虚拟主机](#虚拟主机)
-    * [通信数据转发](#通信数据转发)
-* [六、HTTPS](#六https)
-    * [加密](#加密)
-    * [认证](#认证)
-    * [完整性保护](#完整性保护)
-    * [HTTPS 的缺点](#https-的缺点)
-* [七、HTTP/2.0](#七http20)
-    * [HTTP/1.x 缺陷](#http1x-缺陷)
-    * [二进制分帧层](#二进制分帧层)
-    * [服务端推送](#服务端推送)
-    * [首部压缩](#首部压缩)
-* [八、HTTP/1.1 新特性](#八http11-新特性)
-* [九、GET 和 POST 比较](#九get-和-post-比较)
-    * [作用](#作用)
-    * [参数](#参数)
-    * [安全](#安全)
-    * [幂等性](#幂等性)
-    * [可缓存](#可缓存)
-    * [XMLHttpRequest](#xmlhttprequest)
-* [参考资料](#参考资料)
-<!-- GFM-TOC -->
+- [一 、基础概念](#%E4%B8%80-%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5)
+  - [URI](#uri)
+  - [请求和响应报文](#%E8%AF%B7%E6%B1%82%E5%92%8C%E5%93%8D%E5%BA%94%E6%8A%A5%E6%96%87)
+    - [1. 请求报文](#1-%E8%AF%B7%E6%B1%82%E6%8A%A5%E6%96%87)
+    - [2. 响应报文](#2-%E5%93%8D%E5%BA%94%E6%8A%A5%E6%96%87)
+- [二、HTTP 方法](#%E4%BA%8Chttp-%E6%96%B9%E6%B3%95)
+  - [GET](#get)
+  - [POST](#post)
+  - [PUT](#put)
+  - [PATCH](#patch)
+  - [DELETE](#delete)
+  - [OPTIONS](#options)
+  - [CONNECT](#connect)
+  - [TRACE](#trace)
+- [五、具体应用](#%E4%BA%94%E5%85%B7%E4%BD%93%E5%BA%94%E7%94%A8)
+  - [连接管理](#%E8%BF%9E%E6%8E%A5%E7%AE%A1%E7%90%86)
+    - [1. 短连接与长连接](#1-%E7%9F%AD%E8%BF%9E%E6%8E%A5%E4%B8%8E%E9%95%BF%E8%BF%9E%E6%8E%A5)
+    - [2. 流水线](#2-%E6%B5%81%E6%B0%B4%E7%BA%BF)
+  - [Cookie](#cookie)
+    - [1. 用途](#1-%E7%94%A8%E9%80%94)
+    - [2. 创建过程](#2-%E5%88%9B%E5%BB%BA%E8%BF%87%E7%A8%8B)
+    - [3. 分类](#3-%E5%88%86%E7%B1%BB)
+    - [4. 作用域](#4-%E4%BD%9C%E7%94%A8%E5%9F%9F)
+    - [5. JavaScript](#5-javascript)
+    - [6. HttpOnly](#6-httponly)
+    - [7. Secure](#7-secure)
+    - [8. Session](#8-session)
+    - [9. 浏览器禁用 Cookie](#9-%E6%B5%8F%E8%A7%88%E5%99%A8%E7%A6%81%E7%94%A8-cookie)
+    - [10. Cookie 与 Session 选择](#10-cookie-%E4%B8%8E-session-%E9%80%89%E6%8B%A9)
+  - [缓存](#%E7%BC%93%E5%AD%98)
+    - [1. 优点](#1-%E4%BC%98%E7%82%B9)
+    - [2. 实现方法](#2-%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%B3%95)
+    - [3. Cache-Control](#3-cache-control)
+    - [4. 缓存验证](#4-%E7%BC%93%E5%AD%98%E9%AA%8C%E8%AF%81)
+  - [内容协商](#%E5%86%85%E5%AE%B9%E5%8D%8F%E5%95%86)
+  - [范围请求](#%E8%8C%83%E5%9B%B4%E8%AF%B7%E6%B1%82)
+    - [3. 响应状态码](#3-%E5%93%8D%E5%BA%94%E7%8A%B6%E6%80%81%E7%A0%81)
+  - [分块传输编码](#%E5%88%86%E5%9D%97%E4%BC%A0%E8%BE%93%E7%BC%96%E7%A0%81)
+  - [多部分对象集合](#%E5%A4%9A%E9%83%A8%E5%88%86%E5%AF%B9%E8%B1%A1%E9%9B%86%E5%90%88)
+  - [虚拟主机](#%E8%99%9A%E6%8B%9F%E4%B8%BB%E6%9C%BA)
+  - [通信数据转发](#%E9%80%9A%E4%BF%A1%E6%95%B0%E6%8D%AE%E8%BD%AC%E5%8F%91)
+    - [1. 代理](#1-%E4%BB%A3%E7%90%86)
+    - [2. 网关](#2-%E7%BD%91%E5%85%B3)
+    - [3. 隧道](#3-%E9%9A%A7%E9%81%93)
+- [六、HTTPS](#%E5%85%ADhttps)
+  - [加密](#%E5%8A%A0%E5%AF%86)
+    - [1. 对称密钥加密](#1-%E5%AF%B9%E7%A7%B0%E5%AF%86%E9%92%A5%E5%8A%A0%E5%AF%86)
+    - [2.非对称密钥加密](#2%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%AF%86%E9%92%A5%E5%8A%A0%E5%AF%86)
+    - [3. HTTPS 采用的加密方式](#3-https-%E9%87%87%E7%94%A8%E7%9A%84%E5%8A%A0%E5%AF%86%E6%96%B9%E5%BC%8F)
+  - [认证](#%E8%AE%A4%E8%AF%81)
+  - [完整性保护](#%E5%AE%8C%E6%95%B4%E6%80%A7%E4%BF%9D%E6%8A%A4)
+  - [HTTPS 的缺点](#https-%E7%9A%84%E7%BC%BA%E7%82%B9)
+- [七、HTTP/2.0](#%E4%B8%83http20)
+  - [HTTP/1.x 缺陷](#http1x-%E7%BC%BA%E9%99%B7)
+  - [服务端推送](#%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%8E%A8%E9%80%81)
+- [八、HTTP/1.1 新特性](#%E5%85%ABhttp11-%E6%96%B0%E7%89%B9%E6%80%A7)
+- [九、GET 和 POST 比较](#%E4%B9%9Dget-%E5%92%8C-post-%E6%AF%94%E8%BE%83)
+  - [作用](#%E4%BD%9C%E7%94%A8)
+  - [参数](#%E5%8F%82%E6%95%B0)
+  - [安全](#%E5%AE%89%E5%85%A8)
+  - [幂等性](#%E5%B9%82%E7%AD%89%E6%80%A7)
+  - [可缓存](#%E5%8F%AF%E7%BC%93%E5%AD%98)
+  - [从输入URL到页面加载发生了什么](#%E4%BB%8E%E8%BE%93%E5%85%A5url%E5%88%B0%E9%A1%B5%E9%9D%A2%E5%8A%A0%E8%BD%BD%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88)
 
 
 # 一 、基础概念
@@ -83,14 +90,6 @@ URI 包含 URL 和 URN。
 > 获取资源
 
 当前网络请求中，绝大部分使用的是 GET 方法。
-
-## HEAD
-
-> 获取报文首部
-
-和 GET 方法类似，但是不返回报文实体主体部分。
-
-主要用于确认 URL 的有效性以及资源更新的日期时间等。
 
 ## POST
 
@@ -170,133 +169,6 @@ CONNECT www.example.com:443 HTTP/1.1
 发送请求时，在 Max-Forwards 首部字段中填入数值，每经过一个服务器就会减 1，当数值为 0 时就停止传输。
 
 通常不会使用 TRACE，并且它容易受到 XST 攻击（Cross-Site Tracing，跨站追踪）。
-
-# 三、HTTP 状态码
-
-服务器返回的  **响应报文**  中第一行为状态行，包含了状态码以及原因短语，用来告知客户端请求的结果。
-
-| 状态码 | 类别 | 含义 |
-| :---: | :---: | :---: |
-| 1XX | Informational（信息性状态码） | 接收的请求正在处理 |
-| 2XX | Success（成功状态码） | 请求正常处理完毕 |
-| 3XX | Redirection（重定向状态码） | 需要进行附加操作以完成请求 |
-| 4XX | Client Error（客户端错误状态码） | 服务器无法处理请求 |
-| 5XX | Server Error（服务器错误状态码） | 服务器处理请求出错 |
-
-## 1XX 信息
-
--  **100 Continue** ：表明到目前为止都很正常，客户端可以继续发送请求或者忽略这个响应。
-
-## 2XX 成功
-
--  **200 OK** 
-
--  **204 No Content** ：请求已经成功处理，但是返回的响应报文不包含实体的主体部分。一般在只需要从客户端往服务器发送信息，而不需要返回数据时使用。
-
--  **206 Partial Content** ：表示客户端进行了范围请求，响应报文包含由 Content-Range 指定范围的实体内容。
-
-## 3XX 重定向
-
--  **301 Moved Permanently** ：永久性重定向
-
--  **302 Found** ：临时性重定向
-
--  **303 See Other** ：和 302 有着相同的功能，但是 303 明确要求客户端应该采用 GET 方法获取资源。
-
-- 注：虽然 HTTP 协议规定 301、302 状态下重定向时不允许把 POST 方法改成 GET 方法，但是大多数浏览器都会在 301、302 和 303 状态下的重定向把 POST 方法改成 GET 方法。
-
--  **304 Not Modified** ：如果请求报文首部包含一些条件，例如：If-Match，If-Modified-Since，If-None-Match，If-Range，If-Unmodified-Since，如果不满足条件，则服务器会返回 304 状态码。
-
--  **307 Temporary Redirect** ：临时重定向，与 302 的含义类似，但是 307 要求浏览器不会把重定向请求的 POST 方法改成 GET 方法。
-
-## 4XX 客户端错误
-
--  **400 Bad Request** ：请求报文中存在语法错误。
-
--  **401 Unauthorized** ：该状态码表示发送的请求需要有认证信息（BASIC 认证、DIGEST 认证）。如果之前已进行过一次请求，则表示用户认证失败。
-
--  **403 Forbidden** ：请求被拒绝。
-
--  **404 Not Found** 
-
-## 5XX 服务器错误
-
--  **500 Internal Server Error** ：服务器正在执行请求时发生错误。
-
--  **503 Service Unavailable** ：服务器暂时处于超负载或正在进行停机维护，现在无法处理请求。
-
-# 四、HTTP 首部
-
-有 4 种类型的首部字段：通用首部字段、请求首部字段、响应首部字段和实体首部字段。
-
-各种首部字段及其含义如下（不需要全记，仅供查阅）：
-
-## 通用首部字段
-
-| 首部字段名 | 说明 |
-| :--: | :--: |
-| Cache-Control | 控制缓存的行为 |
-| Connection | 控制不再转发给代理的首部字段、管理持久连接|
-| Date | 创建报文的日期时间 |
-| Pragma | 报文指令 |
-| Trailer | 报文末端的首部一览 |
-| Transfer-Encoding | 指定报文主体的传输编码方式 |
-| Upgrade | 升级为其他协议 |
-| Via | 代理服务器的相关信息 |
-| Warning | 错误通知 |
-
-## 请求首部字段
-
-| 首部字段名 | 说明 |
-| :--: | :--: |
-| Accept | 用户代理可处理的媒体类型 |
-| Accept-Charset | 优先的字符集 |
-| Accept-Encoding | 优先的内容编码 |
-| Accept-Language | 优先的语言（自然语言） |
-| Authorization | Web 认证信息 |
-| Expect | 期待服务器的特定行为 |
-| From | 用户的电子邮箱地址 |
-| Host | 请求资源所在服务器 |
-| If-Match | 比较实体标记（ETag） |
-| If-Modified-Since | 比较资源的更新时间 |
-| If-None-Match | 比较实体标记（与 If-Match 相反） |
-| If-Range | 资源未更新时发送实体 Byte 的范围请求 |
-| If-Unmodified-Since | 比较资源的更新时间（与 If-Modified-Since 相反） |
-| Max-Forwards | 最大传输逐跳数 |
-| Proxy-Authorization | 代理服务器要求客户端的认证信息 |
-| Range | 实体的字节范围请求 |
-| Referer | 对请求中 URI 的原始获取方 |
-| TE | 传输编码的优先级 |
-| User-Agent | HTTP 客户端程序的信息 |
-
-## 响应首部字段
-
-| 首部字段名 | 说明 |
-| :--: | :--: |
-| Accept-Ranges | 是否接受字节范围请求 |
-| Age | 推算资源创建经过时间 |
-| ETag | 资源的匹配信息 |
-| Location | 令客户端重定向至指定 URI |
-| Proxy-Authenticate | 代理服务器对客户端的认证信息 |
-| Retry-After | 对再次发起请求的时机要求 |
-| Server | HTTP 服务器的安装信息 |
-| Vary | 代理服务器缓存的管理信息 |
-| WWW-Authenticate | 服务器对客户端的认证信息 |
-
-## 实体首部字段
-
-| 首部字段名 | 说明 |
-| :--: | :--: |
-| Allow | 资源可支持的 HTTP 方法 |
-| Content-Encoding | 实体主体适用的编码方式 |
-| Content-Language | 实体主体的自然语言 |
-| Content-Length | 实体主体的大小 |
-| Content-Location | 替代对应资源的 URI |
-| Content-MD5 | 实体主体的报文摘要 |
-| Content-Range | 实体主体的位置范围 |
-| Content-Type | 实体主体的媒体类型 |
-| Expires | 实体主体过期的日期时间 |
-| Last-Modified | 资源的最后修改日期时间 |
 
 # 五、具体应用
 
@@ -513,71 +385,18 @@ If-Modified-Since: Wed, 21 Oct 2015 07:28:00 GMT
 
 通过内容协商返回最合适的内容，例如根据浏览器的默认语言选择返回中文界面还是英文界面。
 
-### 1. 类型
 
-**1.1 服务端驱动型** 
-
-客户端设置特定的 HTTP 首部字段，例如 Accept、Accept-Charset、Accept-Encoding、Accept-Language，服务器根据这些字段返回特定的资源。
-
-它存在以下问题：
-
-- 服务器很难知道客户端浏览器的全部信息；
-- 客户端提供的信息相当冗长（HTTP/2 协议的首部压缩机制缓解了这个问题），并且存在隐私风险（HTTP 指纹识别技术）；
-- 给定的资源需要返回不同的展现形式，共享缓存的效率会降低，而服务器端的实现会越来越复杂。
-
-**1.2 代理驱动型** 
+**1. 代理驱动型** 
 
 服务器返回 300 Multiple Choices 或者 406 Not Acceptable，客户端从中选出最合适的那个资源。
 
-### 2. Vary
 
-```html
-Vary: Accept-Language
-```
 
-在使用内容协商的情况下，只有当缓存服务器中的缓存满足内容协商条件时，才能使用该缓存，否则应该向源服务器请求该资源。
-
-例如，一个客户端发送了一个包含 Accept-Language 首部字段的请求之后，源服务器返回的响应包含 `Vary: Accept-Language` 内容，缓存服务器对这个响应进行缓存之后，在客户端下一次访问同一个 URL 资源，并且 Accept-Language 与缓存中的对应的值相同时才会返回该缓存。
-
-## 内容编码
-
-内容编码将实体主体进行压缩，从而减少传输的数据量。
-
-常用的内容编码有：gzip、compress、deflate、identity。
-
-浏览器发送 Accept-Encoding 首部，其中包含有它所支持的压缩算法，以及各自的优先级。服务器则从中选择一种，使用该算法对响应的消息主体进行压缩，并且发送 Content-Encoding 首部来告知浏览器它选择了哪一种算法。由于该内容协商过程是基于编码类型来选择资源的展现形式的，在响应的 Vary 首部至少要包含 Content-Encoding。
 
 ## 范围请求
 
 如果网络出现中断，服务器只发送了一部分数据，范围请求可以使得客户端只请求服务器未发送的那部分数据，从而避免服务器重新发送所有数据。
 
-### 1. Range
-
-在请求报文中添加 Range 首部字段指定请求的范围。
-
-```html
-GET /z4d4kWk.jpg HTTP/1.1
-Host: i.imgur.com
-Range: bytes=0-1023
-```
-
-请求成功的话服务器返回的响应包含 206 Partial Content 状态码。
-
-```html
-HTTP/1.1 206 Partial Content
-Content-Range: bytes 0-1023/146515
-Content-Length: 1024
-...
-(binary content)
-```
-
-### 2. Accept-Ranges
-
-响应首部字段 Accept-Ranges 用于告知客户端是否能处理范围请求，可以处理使用 bytes，否则使用 none。
-
-```html
-Accept-Ranges: bytes
-```
 
 ### 3. 响应状态码
 
@@ -687,6 +506,14 @@ HTTPS 并不是新协议，而是让 HTTP 先和 SSL（Secure Sockets Layer）�
 
 HTTPS 采用混合的加密机制，使用非对称密钥加密用于传输对称密钥来保证传输过程的安全性，之后使用对称密钥加密进行通信来保证通信过程的效率。（下图中的 Session Key 就是对称密钥）
 
+
+1. 向服务器发起请求。
+2. 取出公有密钥及证书并发送给客户端。
+3. 客户端判断公有密钥是否有效，无效则显示警告。有效则生成一个随机数串，并以此生成客户端的共享密钥。
+4. 用步骤3得到的公有密钥对该随机数串加密，发送到服务器。
+5. 服务器得到加密报文，用私有密钥解密报文，得到随机数串，并以此生成服务器端的共享密钥。此时客户端和服务端拥有相同的共享密钥，可以用该共享密钥进行安全通信。
+6. 服务器对响应进行加密，客户端对报文进行解密。
+
 <div align="center"> <img src="pics/How-HTTPS-Works.png" width="600"/> </div><br>
 
 ## 认证
@@ -724,19 +551,7 @@ HTTP/1.x 实现简单是以牺牲性能为代价的：
 - 不会压缩请求和响应首部，从而导致不必要的网络流量；
 - 不支持有效的资源优先级，致使底层 TCP 连接的利用率低下。
 
-## 二进制分帧层
 
-HTTP/2.0 将报文分成 HEADERS 帧和 DATA 帧，它们都是二进制格式的。
-
-<div align="center"> <img src="pics/86e6a91d-a285-447a-9345-c5484b8d0c47.png" width="400"/> </div><br>
-
-在通信过程中，只会有一个 TCP 连接存在，它承载了任意数量的双向数据流（Stream）。
-
-- 一个数据流（Stream）都有一个唯一标识符和可选的优先级信息，用于承载双向信息。
-- 消息（Message）是与逻辑请求或响应对应的完整的一系列帧。
-- 帧（Frame）是最小的通信单位，来自不同数据流的帧可以交错发送，然后再根据每个帧头的数据流标识符重新组装。
-
-<div align="center"> <img src="pics/af198da1-2480-4043-b07f-a3b91a88b815.png" width="600"/> </div><br>
 
 ## 服务端推送
 
@@ -744,15 +559,6 @@ HTTP/2.0 在客户端请求一个资源时，会把相关的资源一起发送�
 
 <div align="center"> <img src="pics/e3f1657c-80fc-4dfa-9643-bf51abd201c6.png" width="800"/> </div><br>
 
-## 首部压缩
-
-HTTP/1.1 的首部带有大量信息，而且每次都要重复发送。
-
-HTTP/2.0 要求客户端和服务器同时维护和更新一个包含之前见过的首部字段表，从而避免了重复传输。
-
-不仅如此，HTTP/2.0 也使用 Huffman 编码对首部字段进行压缩。
-
-<div align="center"> <img src="pics/_u4E0B_u8F7D.png" width="600"/> </div><br>
 
 # 八、HTTP/1.1 新特性
 
@@ -839,47 +645,17 @@ DELETE /idX/delete HTTP/1.1   -> Returns 404
 - 响应报文的状态码是可缓存的，包括：200, 203, 204, 206, 300, 301, 404, 405, 410, 414, and 501。
 - 响应报文的 Cache-Control 首部字段没有指定不进行缓存。
 
-## XMLHttpRequest
 
-为了阐述 POST 和 GET 的另一个区别，需要先了解 XMLHttpRequest：
+## 从输入URL到页面加载发生了什么
 
-> XMLHttpRequest 是一个 API，它为客户端提供了在客户端和服务器之间传输数据的功能。它提供了一个通过 URL 来获取数据的简单方式，并且不会使整个页面刷新。这使得网页只更新一部分页面而不会打扰到用户。XMLHttpRequest 在 AJAX 中被大量使用。
+1. DNS解析
 
-- 在使用 XMLHttpRequest 的 POST 方法时，浏览器会先发送 Header 再发送 Data。但并不是所有浏览器会这么做，例如火狐就不会。
-- 而 GET 方法 Header 和 Data 会一起发送。
+2. TCP连接
 
-# 参考资料
+3. 发送HTTP请求
 
-- 上野宣. 图解 HTTP[M]. 人民邮电出版社, 2014.
-- [MDN : HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP)
-- [HTTP/2 简介](https://developers.google.com/web/fundamentals/performance/http2/?hl=zh-cn)
-- [htmlspecialchars](http://php.net/manual/zh/function.htmlspecialchars.php)
-- [Difference between file URI and URL in java](http://java2db.com/java-io/how-to-get-and-the-difference-between-file-uri-and-url-in-java)
-- [How to Fix SQL Injection Using Java PreparedStatement & CallableStatement](https://software-security.sans.org/developer-how-to/fix-sql-injection-in-java-using-prepared-callable-statement)
-- [浅谈 HTTP 中 Get 与 Post 的区别](https://www.cnblogs.com/hyddd/archive/2009/03/31/1426026.html)
-- [Are http:// and www really necessary?](https://www.webdancers.com/are-http-and-www-necesary/)
-- [HTTP (HyperText Transfer Protocol)](https://www.ntu.edu.sg/home/ehchua/programming/webprogramming/HTTP_Basics.html)
-- [Web-VPN: Secure Proxies with SPDY & Chrome](https://www.igvita.com/2011/12/01/web-vpn-secure-proxies-with-spdy-chrome/)
-- [File:HTTP persistent connection.svg](http://en.wikipedia.org/wiki/File:HTTP_persistent_connection.svg)
-- [Proxy server](https://en.wikipedia.org/wiki/Proxy_server)
-- [What Is This HTTPS/SSL Thing And Why Should You Care?](https://www.x-cart.com/blog/what-is-https-and-ssl.html)
-- [What is SSL Offloading?](https://securebox.comodo.com/ssl-sniffing/ssl-offloading/)
-- [Sun Directory Server Enterprise Edition 7.0 Reference - Key Encryption](https://docs.oracle.com/cd/E19424-01/820-4811/6ng8i26bn/index.html)
-- [An Introduction to Mutual SSL Authentication](https://www.codeproject.com/Articles/326574/An-Introduction-to-Mutual-SSL-Authentication)
-- [The Difference Between URLs and URIs](https://danielmiessler.com/study/url-uri/)
-- [Cookie 与 Session 的区别](https://juejin.im/entry/5766c29d6be3ff006a31b84e#comment)
-- [COOKIE 和 SESSION 有什么区别](https://www.zhihu.com/question/19786827)
-- [Cookie/Session 的机制与安全](https://harttle.land/2015/08/10/cookie-session.html)
-- [HTTPS 证书原理](https://shijianan.com/2017/06/11/https/)
-- [What is the difference between a URI, a URL and a URN?](https://stackoverflow.com/questions/176264/what-is-the-difference-between-a-uri-a-url-and-a-urn)
-- [XMLHttpRequest](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest)
-- [XMLHttpRequest (XHR) Uses Multiple Packets for HTTP POST?](https://blog.josephscott.org/2009/08/27/xmlhttprequest-xhr-uses-multiple-packets-for-http-post/)
-- [Symmetric vs. Asymmetric Encryption – What are differences?](https://www.ssl2buy.com/wiki/symmetric-vs-asymmetric-encryption-what-are-differences)
-- [Web 性能优化与 HTTP/2](https://www.kancloud.cn/digest/web-performance-http2)
-- [HTTP/2 简介](https://developers.google.com/web/fundamentals/performance/http2/?hl=zh-cn)
+4. 服务器处理请求并返回HTTP报文
 
+5. 浏览器解析渲染页面
 
-
-
-</br><div align="center">⭐️欢迎关注我的公众号 CyC2018，在公众号后台回复关键字 📚 **资料** 可领取复习大纲，这份大纲是我花了一整年时间整理的面试知识点列表，不仅系统整理了面试知识点，而且标注了各个知识点的重要程度，从而帮你理清多而杂的面试知识点。可以说我基本是按照这份大纲来进行复习的，这份大纲对我拿到了 BAT 头条等 Offer 起到很大的帮助。你们完全可以和我一样根据大纲上列的知识点来进行复习，就不用看很多不重要的内容，也可以知道哪些内容很重要从而多安排一些复习时间。</div></br>
-<div align="center"><img width="180px" src="https://cyc-1256109796.cos.ap-guangzhou.myqcloud.com/%E5%85%AC%E4%BC%97%E5%8F%B7.jpg"></img></div>
+6. 连接结束
