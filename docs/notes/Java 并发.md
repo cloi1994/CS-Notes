@@ -81,11 +81,11 @@
 
 等待其它线程显式地唤醒，否则不会被分配 CPU 时间片。
 
-| 进入方法 | 退出方法 |
-| --- | --- |
+| 进入方法                                   | 退出方法                             |
+| ------------------------------------------ | ------------------------------------ |
 | 没有设置 Timeout 参数的 Object.wait() 方法 | Object.notify() / Object.notifyAll() |
-| 没有设置 Timeout 参数的 Thread.join() 方法 | 被调用的线程执行完毕 |
-| LockSupport.park() 方法 | LockSupport.unpark(Thread) |
+| 没有设置 Timeout 参数的 Thread.join() 方法 | 被调用的线程执行完毕                 |
+| LockSupport.park() 方法                    | LockSupport.unpark(Thread)           |
 
 ## 限期等待（Timed Waiting）
 
@@ -99,13 +99,13 @@
 
 阻塞和等待的区别在于，阻塞是被动的，它是在等待获取一个排它锁。而等待是主动的，通过调用 Thread.sleep() 和 Object.wait() 等方法进入。
 
-| 进入方法 | 退出方法 |
-| --- | --- |
-| Thread.sleep() 方法 | 时间结束 |
-| 设置了 Timeout 参数的 Object.wait() 方法 | 时间结束 / Object.notify() / Object.notifyAll()  |
-| 设置了 Timeout 参数的 Thread.join() 方法 | 时间结束 / 被调用的线程执行完毕 |
-| LockSupport.parkNanos() 方法 | LockSupport.unpark(Thread) |
-| LockSupport.parkUntil() 方法 | LockSupport.unpark(Thread) |
+| 进入方法                                 | 退出方法                                        |
+| ---------------------------------------- | ----------------------------------------------- |
+| Thread.sleep() 方法                      | 时间结束                                        |
+| 设置了 Timeout 参数的 Object.wait() 方法 | 时间结束 / Object.notify() / Object.notifyAll() |
+| 设置了 Timeout 参数的 Thread.join() 方法 | 时间结束 / 被调用的线程执行完毕                 |
+| LockSupport.parkNanos() 方法             | LockSupport.unpark(Thread)                      |
+| LockSupport.parkUntil() 方法             | LockSupport.unpark(Thread)                      |
 
 ## 死亡（Terminated）
 
@@ -164,6 +164,7 @@ public static void main(String[] args) throws ExecutionException, InterruptedExc
     System.out.println(ft.get());
 }
 ```
+
 
 ## 继承 Thread 类
 
@@ -302,6 +303,20 @@ java.lang.InterruptedException: sleep interrupted
     at InterruptExample$$Lambda$1/713338599.run(Unknown Source)
     at java.lang.Thread.run(Thread.java:745)
 ```
+
+**处理中断**
+
+- Java类库中提供的一些可能会发生阻塞的方法都会抛InterruptedException异常，如：BlockingQueue#put、BlockingQueue#take、Object#wait、Thread#sleep。
+
+- 当你的捕获到一个InterruptedException异常后，亦可以处理它，或者向上抛出。
+- 当你捕获到InterruptedException异常后，当前线程的中断状态已经被修改为false(表示线程未被中断)；此时你若能够处理中断，则不用理会该值；但如果你继续向上抛InterruptedException异常，你需要再次调用interrupt方法，将当前线程的中断状态设为true。
+- 注意：绝对不能“吞掉中断”！即捕获了InterruptedException而不作任何处理。这样违背了中断机制的规则，别人想让你线程中断，然而你自己不处理，也不将中断请求告诉调用者，调用者一直以为没有中断请求。
+- For example. You method is called from the loop that must terminate if thread is interrupted. You caught the exception and if you don't raise the flag, the loop will not terminate as required.
+
+为什么catch InterruptedException后会自动清除中断状态？
+When you catch InterruptedException interrupted flag gets reset and your thread is technically not interrupted anymore, and interrupt happens once. However, you don't know if the code that called your code (or other code in the same thread), requires any additional interrupt handling. By calling interrupt() you raise the flag again and effectively saying to the rest of the application "This thread is still interrupted - act on it if necessary".
+
+
 
 ## interrupted()
 
