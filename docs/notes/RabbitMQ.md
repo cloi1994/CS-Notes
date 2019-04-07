@@ -174,3 +174,4 @@ channel.basicReject(message.getMessageProperties().getDeliveryTag(), true);
 
 3.如果上面两种情况还不行，准备一个第三方介质,来做消费记录。以redis为例，给消息分配一个全局id，只要消费过该消息，将<id,message>以K-V形式写入redis。那消费者开始消费前，先去redis中查询有没消费记录即可
 
+https://www.jianshu.com/p/6376936845ff
