@@ -127,7 +127,10 @@ RabbitMQ消息持久化，即数据写到磁盘上。需要exchange，queue，�
 
 ②、发送消息的时候将deliveryMode=2
 
-这样设置以后，rabbitMQ就算挂了，**重启后也能恢复数据**。在消息还没有持久化到硬盘时，可能服务已经死掉，这种情况可以通过引入mirrored-queue即镜像队列，但也不能保证消息百分百不丢失（整个集群都挂掉）
+这样设置以后，rabbitMQ就算挂了，**重启后也能恢复数据**。因为rabbitmq是先将数据缓存起来，到一定条件才保存到硬盘上，在消息还没有持久化到硬盘时，可能服务已经死掉，这种情况可以通过引入mirrored-queue即镜像队列，但也不能保证消息百分百不丢失（整个集群都挂掉）
+
+网上有测试表明：持久化会对RabbitMQ的性能造成比较大的影响，可能会下降10倍不止。
+
 
 ##### 3.消费者丢数据
 
@@ -174,4 +177,18 @@ channel.basicReject(message.getMessageProperties().getDeliveryTag(), true);
 
 3.如果上面两种情况还不行，准备一个第三方介质,来做消费记录。以redis为例，给消息分配一个全局id，只要消费过该消息，将<id,message>以K-V形式写入redis。那消费者开始消费前，先去redis中查询有没消费记录即可
 
-https://www.jianshu.com/p/6376936845ff
+
+### 集群
+
+Exchange A（交换器）的元数据信息在所有节点上是一致的，而Queue（存放消息的队列）的完整数据则只会存在于它所创建的那个节点上。其他节点只知道这个queue的metadata信息和一个指向queue的owner node的指针。
+
+
+![img](https://upload-images.jianshu.io/upload_images/4325076-c555bfd584d9a323.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/551/format/webp)
+
+RabbitMQ的Cluster集群模式一般分为两种，
+
+1. 普通模式。消息队列通过rabbitmq HA镜像队列进行消息队列实体复制。 以两个节点（rabbit01、rabbit02）为例来进行说明。对于Queue来说，消息实体只存在于其中一个节点rabbit01（或者rabbit02），rabbit01和rabbit02两个节点仅有相同的元数据，即队列的结构。当消息进入rabbit01节点的Queue后，consumer从rabbit02节点消费时，RabbitMQ会临时在rabbit01、rabbit02间进行消息传输，把A中的消息实体取出并经过B发送给consumer。所以consumer应尽量连接每一个节点，从中取消息。即对于同一个逻辑队列，要在多个节点建立物理Queue。否则无论consumer连rabbit01或rabbit02，出口总在rabbit01，会产生瓶颈。 
+
+2. 镜像模式下，将需要消费的队列变为镜像队列，存在于多个节点，这样就可以实现RabbitMQ的HA高可用性。作用就是消息实体会主动在镜像节点之间实现同步，而不是像普通模式那样，在consumer消费数据时临时读取。缺点就是，集群内部的同步通讯会占用大量的网络带宽。
+
+
